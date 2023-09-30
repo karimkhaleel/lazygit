@@ -1,4 +1,6 @@
-package main
+//go:generate go run generator.go
+
+package jsonschema
 
 import (
 	"encoding/json"
@@ -7,22 +9,27 @@ import (
 	"reflect"
 
 	"github.com/invopop/jsonschema"
+	"github.com/jesseduffield/lazycore/pkg/utils"
 	"github.com/jesseduffield/lazygit/pkg/config"
 )
 
-func main() {
-	schema := CustomReflect(&config.UserConfig{})
+func GetSchemaDir() string {
+	return utils.GetLazyRootDirectory() + "/schema"
+}
+
+func GenerateSchema() {
+	schema := customReflect(&config.UserConfig{})
 	obj, _ := json.MarshalIndent(schema, "", "  ")
 
-	if err := os.WriteFile("schema.json", obj, 0o644); err != nil {
+	if err := os.WriteFile(GetSchemaDir()+"/schema.json", obj, 0o644); err != nil {
 		fmt.Println("Error writing to file:", err)
 		return
 	}
 }
 
-func CustomReflect(v *config.UserConfig) *jsonschema.Schema {
+func customReflect(v *config.UserConfig) *jsonschema.Schema {
 	defaultConfig := config.GetDefaultConfig()
-	r := new(jsonschema.Reflector)
+	r := &jsonschema.Reflector{KeyNamer: func(name string) string { return name }, FieldNameTag: "yaml"}
 	if err := r.AddGoComments("github.com/jesseduffield/lazygit", "./"); err != nil {
 		panic(err)
 	}
@@ -67,8 +74,17 @@ func setDefaultVals(defaults interface{}, schema *jsonschema.Schema) {
 			continue
 		}
 
-		property, ok := definition.Properties.Get(key)
-		if ok && property == nil {
+		propertyName, ok := definition.OriginalPropertiesMapping[key]
+		if !ok {
+			continue
+		}
+
+		property, ok := definition.Properties.Get(propertyName)
+		if !ok {
+			continue
+		}
+
+		if property.Default != nil {
 			continue
 		}
 
