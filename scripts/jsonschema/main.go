@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"reflect"
 
@@ -12,7 +13,10 @@ import (
 func main() {
 	schema := CustomReflect(&config.UserConfig{})
 	obj, _ := json.MarshalIndent(schema, "", "  ")
-	os.WriteFile("schema.json", obj, 0644)
+	if err := os.WriteFile("schema.json", obj, 0644); err != nil {
+		fmt.Println("Error writing to file:", err)
+		return
+	}
 }
 
 func CustomReflect(v *config.UserConfig) *jsonschema.Schema {
@@ -50,6 +54,7 @@ func setDefaultVals(defaults interface{}, schema *jsonschema.Schema) {
 		switch value.Kind() {
 		case reflect.Chan, reflect.Func, reflect.Map, reflect.Ptr, reflect.Interface, reflect.Slice:
 			isNil = value.IsNil()
+		default:
 		}
 
 		if isNil {
