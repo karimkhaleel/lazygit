@@ -115,10 +115,8 @@ type extendSchemaImpl interface {
 	JSONSchemaExtend(*Schema)
 }
 
-var (
-	customType = reflect.TypeOf((*customSchemaImpl)(nil)).Elem()
-	extendType = reflect.TypeOf((*extendSchemaImpl)(nil)).Elem()
-)
+var customType = reflect.TypeOf((*customSchemaImpl)(nil)).Elem()
+var extendType = reflect.TypeOf((*extendSchemaImpl)(nil)).Elem()
 
 // customSchemaGetFieldDocString
 type customSchemaGetFieldDocString interface {
@@ -663,7 +661,7 @@ func (t *Schema) structKeywordsFromTags(f reflect.StructField, parent *Schema, p
 	t.Description = f.Tag.Get("jsonschema_description")
 
 	tags := splitOnUnescapedCommas(f.Tag.Get("jsonschema"))
-	t.genericKeywords(tags, parent, propertyName)
+	tags = t.genericKeywords(tags, parent, propertyName)
 
 	switch t.Type {
 	case "string":
@@ -682,7 +680,8 @@ func (t *Schema) structKeywordsFromTags(f reflect.StructField, parent *Schema, p
 }
 
 // read struct tags for generic keywords
-func (t *Schema) genericKeywords(tags []string, parent *Schema, propertyName string) { //nolint:gocyclo
+func (t *Schema) genericKeywords(tags []string, parent *Schema, propertyName string) []string { //nolint:gocyclo
+	unprocessed := make([]string, 0, len(tags))
 	for _, tag := range tags {
 		nameValue := strings.Split(tag, "=")
 		if len(nameValue) == 2 {
@@ -778,20 +777,12 @@ func (t *Schema) genericKeywords(tags []string, parent *Schema, propertyName str
 						Type: ty,
 					})
 				}
-			case "enum":
-				switch t.Type {
-				case "string":
-					t.Enum = append(t.Enum, val)
-				case "integer":
-					i, _ := strconv.Atoi(val)
-					t.Enum = append(t.Enum, i)
-				case "number":
-					f, _ := strconv.ParseFloat(val, 64)
-					t.Enum = append(t.Enum, f)
-				}
+			default:
+				unprocessed = append(unprocessed, tag)
 			}
 		}
 	}
+	return unprocessed
 }
 
 // read struct tags for boolean type keywords
@@ -842,6 +833,8 @@ func (t *Schema) stringKeywords(tags []string) {
 				t.Default = val
 			case "example":
 				t.Examples = append(t.Examples, val)
+			case "enum":
+				t.Enum = append(t.Enum, val)
 			}
 		}
 	}
@@ -872,6 +865,10 @@ func (t *Schema) numericalKeywords(tags []string) {
 				if num, ok := toJSONNumber(val); ok {
 					t.Examples = append(t.Examples, num)
 				}
+			case "enum":
+				if num, ok := toJSONNumber(val); ok {
+					t.Enum = append(t.Enum, num)
+				}
 			}
 		}
 	}
@@ -896,6 +893,8 @@ func (t *Schema) numericalKeywords(tags []string) {
 // read struct tags for array type keywords
 func (t *Schema) arrayKeywords(tags []string) {
 	var defaultValues []any
+
+	unprocessed := make([]string, 0, len(tags))
 	for _, tag := range tags {
 		nameValue := strings.Split(tag, "=")
 		if len(nameValue) == 2 {
@@ -911,26 +910,35 @@ func (t *Schema) arrayKeywords(tags []string) {
 				t.UniqueItems = true
 			case "default":
 				defaultValues = append(defaultValues, val)
-			case "enum":
-				switch t.Items.Type {
-				case "string":
-					t.Items.Enum = append(t.Items.Enum, val)
-				case "integer":
-					i, _ := strconv.Atoi(val)
-					t.Items.Enum = append(t.Items.Enum, i)
-				case "number":
-					f, _ := strconv.ParseFloat(val, 64)
-					t.Items.Enum = append(t.Items.Enum, f)
-				}
 			case "format":
 				t.Items.Format = val
 			case "pattern":
 				t.Items.Pattern = val
+			default:
+				unprocessed = append(unprocessed, tag) // left for further processing by underlying type
 			}
 		}
 	}
 	if len(defaultValues) > 0 {
 		t.Default = defaultValues
+	}
+
+	if len(unprocessed) == 0 {
+		// we don't have anything else to process
+		return
+	}
+
+	switch t.Items.Type {
+	case "string":
+		t.Items.stringKeywords(unprocessed)
+	case "number":
+		t.Items.numericalKeywords(unprocessed)
+	case "integer":
+		t.Items.numericalKeywords(unprocessed)
+	case "array":
+		// explicitly don't support traversal for the [][]..., as it's unclear where the array tags belong
+	case "boolean":
+		t.Items.booleanKeywords(unprocessed)
 	}
 }
 

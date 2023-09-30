@@ -8,9 +8,9 @@ import (
 	"os"
 	"reflect"
 
-	"github.com/invopop/jsonschema"
 	"github.com/jesseduffield/lazycore/pkg/utils"
 	"github.com/jesseduffield/lazygit/pkg/config"
+	"github.com/karimkhaleel/jsonschema"
 )
 
 func GetSchemaDir() string {
