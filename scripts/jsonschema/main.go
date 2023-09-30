@@ -13,7 +13,8 @@ import (
 func main() {
 	schema := CustomReflect(&config.UserConfig{})
 	obj, _ := json.MarshalIndent(schema, "", "  ")
-	if err := os.WriteFile("schema.json", obj, 0644); err != nil {
+
+	if err := os.WriteFile("schema.json", obj, 0o644); err != nil {
 		fmt.Println("Error writing to file:", err)
 		return
 	}
