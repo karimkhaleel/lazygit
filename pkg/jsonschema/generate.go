@@ -21,7 +21,7 @@ func GenerateSchema() {
 	schema := customReflect(&config.UserConfig{})
 	obj, _ := json.MarshalIndent(schema, "", "  ")
 
-	if err := os.WriteFile(GetSchemaDir()+"/schema.json", obj, 0o644); err != nil {
+	if err := os.WriteFile(GetSchemaDir()+"/config.json", obj, 0o644); err != nil {
 		fmt.Println("Error writing to file:", err)
 		return
 	}
@@ -29,7 +29,7 @@ func GenerateSchema() {
 
 func customReflect(v *config.UserConfig) *jsonschema.Schema {
 	defaultConfig := config.GetDefaultConfig()
-	r := &jsonschema.Reflector{KeyNamer: func(name string) string { return name }, FieldNameTag: "yaml"}
+	r := &jsonschema.Reflector{FieldNameTag: "yaml", RequiredFromJSONSchemaTags: true}
 	if err := r.AddGoComments("github.com/jesseduffield/lazygit", "./"); err != nil {
 		panic(err)
 	}
@@ -60,7 +60,7 @@ func setDefaultVals(defaults interface{}, schema *jsonschema.Schema) {
 
 		isNil := true
 		switch value.Kind() {
-		case reflect.Chan, reflect.Func, reflect.Map, reflect.Ptr, reflect.Interface, reflect.Slice:
+		case reflect.Map, reflect.Ptr, reflect.Interface, reflect.Slice:
 			isNil = value.IsNil()
 		default:
 		}
