@@ -10,30 +10,30 @@ type UserConfig struct {
 	// Config relating to git
 	Git GitConfig `yaml:"git"`
 	// Periodic update checks
-	Update UpdateConfig `yaml:"update"`
+	Update UpdateConfig `yaml:"update" jsonschema:"additionalProperties=false"`
 	// Background refreshes
-	Refresher RefresherConfig `yaml:"refresher"`
+	Refresher RefresherConfig `yaml:"refresher" jsonschema:"additionalProperties=false"`
 	// If true, show a confirmation popup before quitting Lazygit
 	ConfirmOnQuit bool `yaml:"confirmOnQuit"`
 	// If true, exit Lazygit when the user presses escape in a context where there is nothing to cancel/close
 	QuitOnTopLevelReturn bool `yaml:"quitOnTopLevelReturn"`
 	// Keybindings
-	Keybinding KeybindingConfig `yaml:"keybinding"`
+	Keybinding KeybindingConfig `yaml:"keybinding" jsonschema:"example=<enter>,example=<c-b>,example=g"`
 	// Config relating to things outside of Lazygit like how files are opened, copying to clipboard, etc
 	OS OSConfig `yaml:"os,omitempty"`
 	// If true, don't display introductory popups upon opening Lazygit.
 	// Lazygit sets this to true upon first runninng the program so that you don't see introductory popups every time you open the program.
 	DisableStartupPopups bool `yaml:"disableStartupPopups"`
 	// User-configured commands that can be invoked from within Lazygit
-	CustomCommands []CustomCommand `yaml:"customCommands"`
+	CustomCommands []CustomCommand `yaml:"customCommands" jsonschema:"uniqueItems=true"`
 	// See https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md#custom-pull-request-urls
-	Services map[string]string `yaml:"services"`
+	Services map[string]string `yaml:"services" jsonschema:"additionalProperties=false"`
 	// What to do when opening Lazygit outside of a git repo.
 	// - 'prompt': (default) ask whether to initialize a new repo or open in the most recent repo
 	// - 'create': initialize a new repo
 	// - 'skip': open most recent repo
 	// - 'quit': exit Lazygit
-	NotARepository string `yaml:"notARepository"`
+	NotARepository string `yaml:"notARepository" jsonschema:"enum=prompt,enum=create,enum=skip,enum=quit"`
 	// If true, display a confirmation when subprocess terminates. This allows you to view the output of the subprocess before returning to Lazygit.
 	PromptToReturnFromSubprocess bool `yaml:"promptToReturnFromSubprocess"`
 }
@@ -41,19 +41,19 @@ type UserConfig struct {
 type RefresherConfig struct {
 	// File/submodule refresh interval in seconds.
 	// Auto-refresh can be disabled via option 'git.autoRefresh'.
-	RefreshInterval int `yaml:"refreshInterval"`
+	RefreshInterval int `yaml:"refreshInterval" jsonschema:"minimum=0"`
 	// Re-fetch interval in seconds.
 	// Auto-fetch can be disabled via option 'git.autoFetch'.
-	FetchInterval int `yaml:"fetchInterval"`
+	FetchInterval int `yaml:"fetchInterval" jsonschema:"minimum=0"`
 }
 
 type GuiConfig struct {
 	// See https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md#custom-author-color
-	AuthorColors map[string]string `yaml:"authorColors"`
+	AuthorColors map[string]string `yaml:"authorColors" jsonschema:"additionalProperties=false"`
 	// See https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md#custom-branch-color
-	BranchColors map[string]string `yaml:"branchColors"`
+	BranchColors map[string]string `yaml:"branchColors" jsonschema:"additionalProperties=false"`
 	// The number of lines you scroll by when scrolling the main window
-	ScrollHeight int `yaml:"scrollHeight"`
+	ScrollHeight int `yaml:"scrollHeight" jsonschema:"minimum=1"`
 	// If true, allow scrolling past the bottom of the content in the main window
 	ScrollPastBottom bool `yaml:"scrollPastBottom"`
 	// See https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md#scroll-off-margin
@@ -73,7 +73,7 @@ type GuiConfig struct {
 	SkipRewordInEditorWarning bool `yaml:"skipRewordInEditorWarning"`
 	// Fraction of the total screen width to use for the left side section. You may want to pick a small number (e.g. 0.2) if you're using a narrow screen, so that you can see more of the main section.
 	// Number from 0 to 1.0.
-	SidePanelWidth float64 `yaml:"sidePanelWidth"`
+	SidePanelWidth float64 `yaml:"sidePanelWidth" jsonschema:"maximum=1,minimum=0"`
 	// If true, increase the height of the focused side window; creating an accordion effect.
 	ExpandFocusedSidePanel bool `yaml:"expandFocusedSidePanel"`
 	// Sometimes the main window is split in two (e.g. when the selected file has both staged and unstaged changes). This setting controls how the two sections are split.
@@ -81,9 +81,9 @@ type GuiConfig struct {
 	// - 'horizontal': split the window horizontally
 	// - 'vertical': split the window vertically
 	// - 'flexible': (default) split the window horizontally if the window is wide enough, otherwise split vertically
-	MainPanelSplitMode string `yaml:"mainPanelSplitMode"`
+	MainPanelSplitMode string `yaml:"mainPanelSplitMode" jsonschema:"enum=horizontal,enum=flexible,enum=vertical"`
 	// One of 'auto' (default) | 'en' | 'zh-CN' | 'zh-TW' | 'pl' | 'nl' | 'ja' | 'ko' | 'ru'
-	Language string `yaml:"language"`
+	Language string `yaml:"language" jsonschema:"enum=auto,enum=en,enum=zh,enum=pl,enum=nl,enum=ja,enum=ko,enum=ru"`
 	// Format used when displaying time e.g. commit time.
 	// Uses Go's time format syntax: https://pkg.go.dev/time#Time.Format
 	TimeFormat string `yaml:"timeFormat"`
@@ -92,9 +92,9 @@ type GuiConfig struct {
 	ShortTimeFormat string `yaml:"shortTimeFormat"`
 	// Config relating to colors and styles.
 	// See https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md#color-attributes
-	Theme ThemeConfig `yaml:"theme"`
+	Theme ThemeConfig `yaml:"theme" jsonschema:"additionalProperties=false"`
 	// Config relating to the commit length indicator
-	CommitLength CommitLengthConfig `yaml:"commitLength"`
+	CommitLength CommitLengthConfig `yaml:"commitLength" jsonschema:"additionalProperties=false"`
 	// If true, show the '5 of 20' footer at the bottom of list views
 	ShowListFooter bool `yaml:"showListFooter"`
 	// If true, display the files in the file views as a tree. If false, display the files as a flat list.
@@ -113,52 +113,52 @@ type GuiConfig struct {
 	// Nerd fonts version to use.
 	// One of: '2' | '3' | empty string (default)
 	// If empty, do not show icons.
-	NerdFontsVersion string `yaml:"nerdFontsVersion"`
+	NerdFontsVersion string `yaml:"nerdFontsVersion" jsonschema:"enum=2,enum=3,enum="`
 	// If true, show commit hashes alongside branch names in the branches view.
 	ShowBranchCommitHash bool `yaml:"showBranchCommitHash"`
 	// Height of the command log view
-	CommandLogSize int `yaml:"commandLogSize"`
+	CommandLogSize int `yaml:"commandLogSize" jsonschema:"minimum=0"`
 	// Whether to split the main window when viewing file changes.
 	// One of: 'auto' | 'always'
 	// If 'auto', only split the main window when a file has both staged and unstaged changes
-	SplitDiff string `yaml:"splitDiff"`
+	SplitDiff string `yaml:"splitDiff" jsonschema:"enum=auto,enum=always"`
 	// Default size for focused window. Window size can be changed from within Lazygit with '+' and '_' (but this won't change the default).
 	// One of: 'normal' (default) | 'half' | 'full'
-	WindowSize string `yaml:"windowSize"`
+	WindowSize string `yaml:"windowSize" jsonschema:"enum=normal,enum=half,enum=full"`
 	// Window border style.
 	// One of 'rounded' (default) | 'single' | 'double' | 'hidden'
-	Border string `yaml:"border"`
+	Border string `yaml:"border" jsonschema:"enum=single,enum=double,enum=rounded,enum=hidden"`
 	// If true, show a seriously epic explosion animation when nuking the working tree.
 	AnimateExplosion bool `yaml:"animateExplosion"`
 }
 
 type ThemeConfig struct {
 	// Border color of focused window
-	ActiveBorderColor []string `yaml:"activeBorderColor"`
+	ActiveBorderColor []string `yaml:"activeBorderColor" jsonschema:"minItems=1,uniqueItems=true"`
 	// Border color of non-focused windows
-	InactiveBorderColor []string `yaml:"inactiveBorderColor"`
+	InactiveBorderColor []string `yaml:"inactiveBorderColor" jsonschema:"minItems=1,uniqueItems=true"`
 	// Border color of focused window when searching in that window
-	SearchingActiveBorderColor []string `yaml:"searchingActiveBorderColor"`
+	SearchingActiveBorderColor []string `yaml:"searchingActiveBorderColor" jsonschema:"minItems=1,uniqueItems=true"`
 	// Color of keybindings help text in the bottom line
-	OptionsTextColor []string `yaml:"optionsTextColor"`
+	OptionsTextColor []string `yaml:"optionsTextColor" jsonschema:"minItems=1,uniqueItems=true"`
 	// Background color of selected line.
 	// See https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md#highlighting-the-selected-line
-	SelectedLineBgColor []string `yaml:"selectedLineBgColor"`
+	SelectedLineBgColor []string `yaml:"selectedLineBgColor" jsonschema:"minItems=1,uniqueItems=true"`
 	// Background color of selected range
 	// See https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md#highlighting-the-selected-line
-	SelectedRangeBgColor []string `yaml:"selectedRangeBgColor"`
+	SelectedRangeBgColor []string `yaml:"selectedRangeBgColor" jsonschema:"minItems=1,uniqueItems=true"`
 	// Foreground color of copied commit
-	CherryPickedCommitFgColor []string `yaml:"cherryPickedCommitFgColor"`
+	CherryPickedCommitFgColor []string `yaml:"cherryPickedCommitFgColor" jsonschema:"minItems=1,uniqueItems=true"`
 	// Background color of copied commit
-	CherryPickedCommitBgColor []string `yaml:"cherryPickedCommitBgColor"`
+	CherryPickedCommitBgColor []string `yaml:"cherryPickedCommitBgColor" jsonschema:"minItems=1,uniqueItems=true"`
 	// Foreground color of marked base commit (for rebase)
 	MarkedBaseCommitFgColor []string `yaml:"markedBaseCommitFgColor"`
 	// Background color of marked base commit (for rebase)
 	MarkedBaseCommitBgColor []string `yaml:"markedBaseCommitBgColor"`
 	// Color for file with unstaged changes
-	UnstagedChangesColor []string `yaml:"unstagedChangesColor"`
+	UnstagedChangesColor []string `yaml:"unstagedChangesColor" jsonschema:"minItems=1,uniqueItems=true"`
 	// Default text color
-	DefaultFgColor []string `yaml:"defaultFgColor"`
+	DefaultFgColor []string `yaml:"defaultFgColor" jsonschema:"minItems=1,uniqueItems=true"`
 }
 
 type CommitLengthConfig struct {
@@ -168,13 +168,13 @@ type CommitLengthConfig struct {
 
 type GitConfig struct {
 	// See https://github.com/jesseduffield/lazygit/blob/master/docs/Custom_Pagers.md
-	Paging PagingConfig `yaml:"paging"`
+	Paging PagingConfig `yaml:"paging" jsonschema:"additionalProperties=false"`
 	// Config relating to committing
-	Commit CommitConfig `yaml:"commit"`
+	Commit CommitConfig `yaml:"commit" jsonschema:"additionalProperties=false"`
 	// Config relating to merging
-	Merging MergingConfig `yaml:"merging"`
+	Merging MergingConfig `yaml:"merging" jsonschema:"additionalProperties=false"`
 	// list of branches that are considered 'main' branches, used when displaying commits
-	MainBranches []string `yaml:"mainBranches"`
+	MainBranches []string `yaml:"mainBranches" jsonschema:"uniqueItems=true"`
 	// Prefix to use when skipping hooks. E.g. if set to 'WIP', then pre-commit hooks will be skipped when the commit message starts with 'WIP'
 	SkipHookPrefix string `yaml:"skipHookPrefix"`
 	// If true, periodically fetch from remote
@@ -192,22 +192,22 @@ type GitConfig struct {
 	// If true, do not allow force pushes
 	DisableForcePushing bool `yaml:"disableForcePushing"`
 	// See https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md#predefined-commit-message-prefix
-	CommitPrefixes map[string]CommitPrefixConfig `yaml:"commitPrefixes"`
+	CommitPrefixes map[string]CommitPrefixConfig `yaml:"commitPrefixes" jsonschema:"additionalProperties=false"`
 	// If true, parse emoji strings in commit messages e.g. render :rocket: as 🚀
 	// (This should really be under 'gui', not 'git')
 	ParseEmoji bool `yaml:"parseEmoji"`
 	// Config for showing the log in the commits view
-	Log LogConfig `yaml:"log"`
+	Log LogConfig `yaml:"log" jsonschema:"additionalProperties=false"`
 }
 
 type PagingConfig struct {
 	// Value of the --color arg in the git diff command. Some pagers want this to be set to 'always' and some want it set to 'never'
-	ColorArg string `yaml:"colorArg"`
+	ColorArg string `yaml:"colorArg" jsonschema:"enum=always,enum=never"`
 	// e.g.
 	// diff-so-fancy
 	// delta --dark --paging=never
 	// ydiff -p cat -s --wrap --width={{columnWidth}}
-	Pager string `yaml:"pager"`
+	Pager string `yaml:"pager" jsonschema:"example=delta --dark --paging=never,example=diff-so-fancy,example=ydiff -p cat -s --wrap --width={{columnWidth}},minLength=1"`
 	// If true, Lazygit will use whatever pager is specified in `$GIT_PAGER`, `$PAGER`, or your *git config*. If the pager ends with something like ` | less` we will strip that part out, because less doesn't play nice with our rendering approach. If the custom pager uses less under the hood, that will also break rendering (hence the `--paging=never` flag for the `delta` pager).
 	UseConfig bool `yaml:"useConfig"`
 	// e.g. 'difft --color=always'
@@ -224,46 +224,46 @@ type MergingConfig struct {
 	// Only applicable to unix users.
 	ManualCommit bool `yaml:"manualCommit"`
 	// Extra args passed to `git merge`, e.g. --no-ff
-	Args string `yaml:"args"`
+	Args string `yaml:"args" jsonschema:"example=--no-ff"`
 }
 
 type LogConfig struct {
 	// One of: 'date-order' | 'author-date-order' | 'topo-order'
 	// 'topo-order' makes it easier to read the git log graph, but commits may not
 	// appear chronologically. See https://git-scm.com/docs/
-	Order string `yaml:"order"`
+	Order string `yaml:"order" jsonschema:"enum=date-order,enum=author-date-order,enum=topo-order,enum=default"`
 	// This determines whether the git graph is rendered in the commits panel
 	// One of 'always' | 'never' 'when-maximised'
-	ShowGraph string `yaml:"showGraph"`
+	ShowGraph string `yaml:"showGraph" jsonschema:"enum=always,enum=never,enum=when-maximised"`
 	// displays the whole git graph by default in the commits view (equivalent to passing the `--all` argument to `git log`)
 	ShowWholeGraph bool `yaml:"showWholeGraph"`
 }
 
 type CommitPrefixConfig struct {
 	// pattern to match on. E.g. for 'feature/AB-123' to match on the AB-123 use "^\\w+\\/(\\w+-\\w+).*"
-	Pattern string `yaml:"pattern"`
+	Pattern string `yaml:"pattern" jsonschema:"example=^\\w+\\/(\\w+-\\w+).*,minLength=1"`
 	// Replace directive. E.g. for 'feature/AB-123' to start the commit message with 'AB-123 ' use "[$1] "
-	Replace string `yaml:"replace"`
+	Replace string `yaml:"replace" jsonschema:"example=[$1] ,minLength=1"`
 }
 
 type UpdateConfig struct {
 	// One of: 'prompt' (default) | 'background' | 'never'
-	Method string `yaml:"method"`
+	Method string `yaml:"method" jsonschema:"enum=prompt,enum=background,enum=never"`
 	// Period in days between update checks
-	Days int64 `yaml:"days"`
+	Days int64 `yaml:"days" jsonschema:"minimum=0"`
 }
 
 type KeybindingConfig struct {
-	Universal     KeybindingUniversalConfig     `yaml:"universal"`
-	Status        KeybindingStatusConfig        `yaml:"status"`
-	Files         KeybindingFilesConfig         `yaml:"files"`
-	Branches      KeybindingBranchesConfig      `yaml:"branches"`
+	Universal     KeybindingUniversalConfig     `yaml:"universal" jsonschema:"additionalProperties=false"`
+	Status        KeybindingStatusConfig        `yaml:"status" jsonschema:"additionalProperties=false"`
+	Files         KeybindingFilesConfig         `yaml:"files" jsonschema:"additionalProperties=false"`
+	Branches      KeybindingBranchesConfig      `yaml:"branches" jsonschema:"additionalProperties=false"`
 	Worktrees     KeybindingWorktreesConfig     `yaml:"worktrees"`
-	Commits       KeybindingCommitsConfig       `yaml:"commits"`
-	Stash         KeybindingStashConfig         `yaml:"stash"`
-	CommitFiles   KeybindingCommitFilesConfig   `yaml:"commitFiles"`
-	Main          KeybindingMainConfig          `yaml:"main"`
-	Submodules    KeybindingSubmodulesConfig    `yaml:"submodules"`
+	Commits       KeybindingCommitsConfig       `yaml:"commits" jsonschema:"additionalProperties=false"`
+	Stash         KeybindingStashConfig         `yaml:"stash" jsonschema:"additionalProperties=false"`
+	CommitFiles   KeybindingCommitFilesConfig   `yaml:"commitFiles" jsonschema:"additionalProperties=false"`
+	Main          KeybindingMainConfig          `yaml:"main" jsonschema:"additionalProperties=false"`
+	Submodules    KeybindingSubmodulesConfig    `yaml:"submodules" jsonschema:"additionalProperties=false"`
 	CommitMessage KeybindingCommitMessageConfig `yaml:"commitMessage"`
 }
 
@@ -302,7 +302,7 @@ type KeybindingUniversalConfig struct {
 	ConfirmInEditor              string   `yaml:"confirmInEditor"`
 	Remove                       string   `yaml:"remove"`
 	New                          string   `yaml:"new"`
-	Edit                         string   `yaml:"edit"`
+	Edit                         string   `yaml:"edit" jsonschema:"example=vim,example=nvim,example=emacs,example=nano,example=vscode,example=sublime,example=bbedit,example=kakoune,example=helix,example=xcode"`
 	OpenFile                     string   `yaml:"openFile"`
 	ScrollUpMain                 string   `yaml:"scrollUpMain"`
 	ScrollDownMain               string   `yaml:"scrollDownMain"`
@@ -425,7 +425,7 @@ type KeybindingMainConfig struct {
 
 type KeybindingSubmodulesConfig struct {
 	Init     string `yaml:"init"`
-	Update   string `yaml:"update"`
+	Update   string `yaml:"update" jsonschema:"additionalProperties=false"`
 	BulkMenu string `yaml:"bulkMenu"`
 }
 
@@ -501,15 +501,15 @@ type CustomCommand struct {
 	// The key to trigger the command. Use a single letter or one of the values from https://github.com/jesseduffield/lazygit/blob/master/docs/keybindings/Custom_Keybindings.md
 	Key string `yaml:"key"`
 	// The context in which to listen for the key
-	Context string `yaml:"context"`
+	Context string `yaml:"context" jsonschema:"enum=status,enum=files,enum=worktrees,enum=localBranches,enum=remotes,enum=remoteBranches,enum=tags,enum=commits,enum=reflogCommits,enum=subCommits,enum=commitFiles,enum=stash,enum=global"`
 	// The command to run (using Go template syntax for placeholder values)
-	Command string `yaml:"command"`
+	Command string `yaml:"command" jsonschema:"example=git fetch {{.Form.Remote}} {{.Form.Branch}} && git checkout FETCH_HEAD"`
 	// If true, run the command in a subprocess (e.g. if the command requires user input)
 	Subprocess bool `yaml:"subprocess"`
 	// A list of prompts that will request user input before running the final command
 	Prompts []CustomCommandPrompt `yaml:"prompts"`
 	// Text to display while waiting for command to finish
-	LoadingText string `yaml:"loadingText"`
+	LoadingText string `yaml:"loadingText" jsonschema:"example=Loading..."`
 	// Label for the custom command when displayed in the keybindings menu
 	Description string `yaml:"description"`
 	// If true, stream the command's output to the Command Log panel
@@ -517,7 +517,7 @@ type CustomCommand struct {
 	// If true, show the command's output in a popup within Lazygit
 	ShowOutput bool `yaml:"showOutput"`
 	// Actions to take after the command has completed
-	After CustomCommandAfterHook `yaml:"after"`
+	After CustomCommandAfterHook `yaml:"after" jsonschema:"additionalProperties=false"`
 }
 
 type CustomCommandPrompt struct {
@@ -537,7 +537,7 @@ type CustomCommandPrompt struct {
 
 	// The message of the confirmation prompt.
 	// Only for confirm prompts.
-	Body string `yaml:"body"`
+	Body string `yaml:"body" jsonschema:"example=Are you sure you want to push to the remote?"`
 
 	// Menu options.
 	// Only for menu prompts.
@@ -545,23 +545,23 @@ type CustomCommandPrompt struct {
 
 	// The command to run to generate menu options
 	// Only for menuFromCommand prompts.
-	Command string `yaml:"command"`
+	Command string `yaml:"command" jsonschema:"example=git fetch {{.Form.Remote}} {{.Form.Branch}} && git checkout FETCH_HEAD"`
 	// The regexp to run specifying groups which are going to be kept from the command's output.
 	// Only for menuFromCommand prompts.
-	Filter string `yaml:"filter"`
+	Filter string `yaml:"filter" jsonschema:"example=.*{{.SelectedRemote.Name }}/(?P<branch>.*)"`
 	// How to format matched groups from the filter to construct a menu item's value.
 	// Only for menuFromCommand prompts.
-	ValueFormat string `yaml:"valueFormat"`
+	ValueFormat string `yaml:"valueFormat" jsonschema:"example={{ .branch }}"`
 	// Like valueFormat but for the labels. If `labelFormat` is not specified, `valueFormat` is shown instead.
 	// Only for menuFromCommand prompts.
-	LabelFormat string `yaml:"labelFormat"`
+	LabelFormat string `yaml:"labelFormat" jsonschema:"example={{ .branch | green }}"`
 }
 
 type CustomCommandSuggestions struct {
 	// Uses built-in logic to obtain the suggestions. One of 'authors' | 'branches' | 'files' | 'refs' | 'remotes' | 'remoteBranches' | 'tags'
-	Preset string `yaml:"preset"`
+	Preset string `yaml:"preset" jsonschema:"enum=authors,enum=branches,enum=files,enum=refs,enum=remotes,enum=remoteBranches,enum=tags"`
 	// Command to run such that each line in the output becomes a suggestion. Mutually exclusive with 'preset' field.
-	Command string `yaml:"command"`
+	Command string `yaml:"command" jsonschema:"example=git fetch {{.Form.Remote}} {{.Form.Branch}} && git checkout FETCH_HEAD"`
 }
 
 type CustomCommandMenuOption struct {
@@ -570,7 +570,7 @@ type CustomCommandMenuOption struct {
 	// The second part of the label
 	Description string `yaml:"description"`
 	// The value that will be used in the command
-	Value string `yaml:"value"`
+	Value string `yaml:"value" jsonschema:"example=feature,minLength=1"`
 }
 
 func GetDefaultConfig() *UserConfig {
