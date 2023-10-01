@@ -1,0 +1,1810 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jesseduffield/lazygit/pkg/config/user-config",
+  "$ref": "#/$defs/UserConfig",
+  "$defs": {
+    "CommitConfig": {
+      "properties": {
+        "signOff": {
+          "omit": null,
+          "type": "boolean"
+        }
+      },
+      "omit": {
+        "SignOff": "signOff"
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "CommitLengthConfig": {
+      "properties": {
+        "show": {
+          "omit": null,
+          "type": "boolean"
+        }
+      },
+      "omit": {
+        "Show": "show"
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "CommitPrefixConfig": {
+      "properties": {
+        "pattern": {
+          "omit": null,
+          "type": "string",
+          "minLength": 1,
+          "examples": ["^\\w+\\/(\\w+-\\w+).*"]
+        },
+        "replace": {
+          "omit": null,
+          "type": "string",
+          "minLength": 1,
+          "examples": ["[$1] "]
+        }
+      },
+      "omit": {
+        "Pattern": "pattern",
+        "Replace": "replace"
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "CustomCommand": {
+      "properties": {
+        "key": {
+          "omit": null,
+          "type": "string"
+        },
+        "context": {
+          "omit": null,
+          "type": "string",
+          "enum": [
+            "status",
+            "files",
+            "worktrees",
+            "localBranches",
+            "remotes",
+            "remoteBranches",
+            "tags",
+            "commits",
+            "reflogCommits",
+            "subCommits",
+            "commitFiles",
+            "stash",
+            "global"
+          ]
+        },
+        "command": {
+          "omit": null,
+          "type": "string",
+          "examples": [
+            "git fetch {{.Form.Remote}} {{.Form.Branch}} \u0026\u0026 git checkout FETCH_HEAD"
+          ]
+        },
+        "subprocess": {
+          "omit": null,
+          "type": "boolean"
+        },
+        "prompts": {
+          "items": {
+            "$ref": "#/$defs/CustomCommandPrompt",
+            "omit": null
+          },
+          "omit": null,
+          "type": "array"
+        },
+        "loadingText": {
+          "omit": null,
+          "type": "string",
+          "examples": ["Loading..."]
+        },
+        "description": {
+          "omit": null,
+          "type": "string"
+        },
+        "stream": {
+          "omit": null,
+          "type": "boolean"
+        },
+        "showOutput": {
+          "omit": null,
+          "type": "boolean"
+        },
+        "after": {
+          "$ref": "#/$defs/CustomCommandAfterHook",
+          "omit": null
+        }
+      },
+      "omit": {
+        "After": "after",
+        "Command": "command",
+        "Context": "context",
+        "Description": "description",
+        "Key": "key",
+        "LoadingText": "loadingText",
+        "Prompts": "prompts",
+        "ShowOutput": "showOutput",
+        "Stream": "stream",
+        "Subprocess": "subprocess"
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "CustomCommandAfterHook": {
+      "properties": {
+        "checkForConflicts": {
+          "omit": null,
+          "type": "boolean"
+        }
+      },
+      "omit": {
+        "CheckForConflicts": "checkForConflicts"
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "CustomCommandMenuOption": {
+      "properties": {
+        "name": {
+          "omit": null,
+          "type": "string"
+        },
+        "description": {
+          "omit": null,
+          "type": "string"
+        },
+        "value": {
+          "omit": null,
+          "type": "string",
+          "minLength": 1,
+          "examples": ["feature"]
+        }
+      },
+      "omit": {
+        "Description": "description",
+        "Name": "name",
+        "Value": "value"
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "CustomCommandPrompt": {
+      "properties": {
+        "type": {
+          "omit": null,
+          "type": "string"
+        },
+        "key": {
+          "omit": null,
+          "type": "string"
+        },
+        "title": {
+          "omit": null,
+          "type": "string"
+        },
+        "initialValue": {
+          "omit": null,
+          "type": "string"
+        },
+        "suggestions": {
+          "$ref": "#/$defs/CustomCommandSuggestions",
+          "omit": null
+        },
+        "body": {
+          "omit": null,
+          "type": "string",
+          "examples": ["Are you sure you want to push to the remote?"]
+        },
+        "Options": {
+          "items": {
+            "$ref": "#/$defs/CustomCommandMenuOption",
+            "omit": null
+          },
+          "omit": null,
+          "type": "array"
+        },
+        "command": {
+          "omit": null,
+          "type": "string",
+          "examples": [
+            "git fetch {{.Form.Remote}} {{.Form.Branch}} \u0026\u0026 git checkout FETCH_HEAD"
+          ]
+        },
+        "filter": {
+          "omit": null,
+          "type": "string",
+          "examples": [".*{{.SelectedRemote.Name }}/(?P\u003cbranch\u003e.*)"]
+        },
+        "valueFormat": {
+          "omit": null,
+          "type": "string",
+          "examples": ["{{ .branch }}"]
+        },
+        "labelFormat": {
+          "omit": null,
+          "type": "string",
+          "examples": ["{{ .branch | green }}"]
+        }
+      },
+      "omit": {
+        "Body": "body",
+        "Command": "command",
+        "Filter": "filter",
+        "InitialValue": "initialValue",
+        "Key": "key",
+        "LabelFormat": "labelFormat",
+        "Options": "Options",
+        "Suggestions": "suggestions",
+        "Title": "title",
+        "Type": "type",
+        "ValueFormat": "valueFormat"
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "CustomCommandSuggestions": {
+      "properties": {
+        "preset": {
+          "omit": null,
+          "type": "string",
+          "enum": [
+            "authors",
+            "branches",
+            "files",
+            "refs",
+            "remotes",
+            "remoteBranches",
+            "tags"
+          ]
+        },
+        "command": {
+          "omit": null,
+          "type": "string",
+          "examples": [
+            "git fetch {{.Form.Remote}} {{.Form.Branch}} \u0026\u0026 git checkout FETCH_HEAD"
+          ]
+        }
+      },
+      "omit": {
+        "Command": "command",
+        "Preset": "preset"
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "GitConfig": {
+      "properties": {
+        "paging": {
+          "$ref": "#/$defs/PagingConfig",
+          "omit": null
+        },
+        "commit": {
+          "$ref": "#/$defs/CommitConfig",
+          "omit": null
+        },
+        "merging": {
+          "$ref": "#/$defs/MergingConfig",
+          "omit": null
+        },
+        "mainBranches": {
+          "items": {
+            "omit": null,
+            "type": "string"
+          },
+          "omit": null,
+          "type": "array",
+          "uniqueItems": true,
+          "default": ["master", "main"]
+        },
+        "skipHookPrefix": {
+          "omit": null,
+          "type": "string"
+        },
+        "autoFetch": {
+          "omit": null,
+          "type": "boolean"
+        },
+        "autoRefresh": {
+          "omit": null,
+          "type": "boolean"
+        },
+        "fetchAll": {
+          "omit": null,
+          "type": "boolean"
+        },
+        "branchLogCmd": {
+          "omit": null,
+          "type": "string"
+        },
+        "allBranchesLogCmd": {
+          "omit": null,
+          "type": "string"
+        },
+        "overrideGpg": {
+          "omit": null,
+          "type": "boolean"
+        },
+        "disableForcePushing": {
+          "omit": null,
+          "type": "boolean"
+        },
+        "commitPrefixes": {
+          "omit": null,
+          "additionalProperties": {
+            "$ref": "#/$defs/CommitPrefixConfig",
+            "omit": null
+          },
+          "type": "object"
+        },
+        "parseEmoji": {
+          "omit": null,
+          "type": "boolean"
+        },
+        "log": {
+          "$ref": "#/$defs/LogConfig",
+          "omit": null
+        }
+      },
+      "omit": {
+        "AllBranchesLogCmd": "allBranchesLogCmd",
+        "AutoFetch": "autoFetch",
+        "AutoRefresh": "autoRefresh",
+        "BranchLogCmd": "branchLogCmd",
+        "Commit": "commit",
+        "CommitPrefixes": "commitPrefixes",
+        "DisableForcePushing": "disableForcePushing",
+        "FetchAll": "fetchAll",
+        "Log": "log",
+        "MainBranches": "mainBranches",
+        "Merging": "merging",
+        "OverrideGpg": "overrideGpg",
+        "Paging": "paging",
+        "ParseEmoji": "parseEmoji",
+        "SkipHookPrefix": "skipHookPrefix"
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "GuiConfig": {
+      "properties": {
+        "authorColors": {
+          "omit": null,
+          "additionalProperties": {
+            "omit": null,
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "branchColors": {
+          "omit": null,
+          "additionalProperties": {
+            "omit": null,
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "scrollHeight": {
+          "omit": null,
+          "type": "integer",
+          "minimum": 1
+        },
+        "scrollPastBottom": {
+          "omit": null,
+          "type": "boolean"
+        },
+        "scrollOffMargin": {
+          "omit": null,
+          "type": "integer"
+        },
+        "scrollOffBehavior": {
+          "omit": null,
+          "type": "string"
+        },
+        "mouseEvents": {
+          "omit": null,
+          "type": "boolean"
+        },
+        "skipDiscardChangeWarning": {
+          "omit": null,
+          "type": "boolean"
+        },
+        "skipStashWarning": {
+          "omit": null,
+          "type": "boolean"
+        },
+        "skipNoStagedFilesWarning": {
+          "omit": null,
+          "type": "boolean"
+        },
+        "skipRewordInEditorWarning": {
+          "omit": null,
+          "type": "boolean"
+        },
+        "sidePanelWidth": {
+          "omit": null,
+          "type": "number",
+          "maximum": 1,
+          "minimum": 0
+        },
+        "expandFocusedSidePanel": {
+          "omit": null,
+          "type": "boolean"
+        },
+        "mainPanelSplitMode": {
+          "omit": null,
+          "type": "string",
+          "enum": ["horizontal", "flexible", "vertical"]
+        },
+        "language": {
+          "omit": null,
+          "type": "string",
+          "enum": ["auto", "en", "zh", "pl", "nl", "ja", "ko", "ru"]
+        },
+        "timeFormat": {
+          "omit": null,
+          "type": "string"
+        },
+        "shortTimeFormat": {
+          "omit": null,
+          "type": "string"
+        },
+        "theme": {
+          "$ref": "#/$defs/ThemeConfig",
+          "omit": null
+        },
+        "commitLength": {
+          "$ref": "#/$defs/CommitLengthConfig",
+          "omit": null
+        },
+        "showListFooter": {
+          "omit": null,
+          "type": "boolean"
+        },
+        "showFileTree": {
+          "omit": null,
+          "type": "boolean"
+        },
+        "showRandomTip": {
+          "omit": null,
+          "type": "boolean"
+        },
+        "showCommandLog": {
+          "omit": null,
+          "type": "boolean"
+        },
+        "showBottomLine": {
+          "omit": null,
+          "type": "boolean"
+        },
+        "showPanelJumps": {
+          "omit": null,
+          "type": "boolean"
+        },
+        "showIcons": {
+          "omit": null,
+          "type": "boolean"
+        },
+        "nerdFontsVersion": {
+          "omit": null,
+          "type": "string",
+          "enum": ["2", "3", ""]
+        },
+        "showBranchCommitHash": {
+          "omit": null,
+          "type": "boolean"
+        },
+        "commandLogSize": {
+          "omit": null,
+          "type": "integer",
+          "minimum": 0
+        },
+        "splitDiff": {
+          "omit": null,
+          "type": "string",
+          "enum": ["auto", "always"]
+        },
+        "windowSize": {
+          "omit": null,
+          "type": "string",
+          "enum": ["normal", "half", "full"]
+        },
+        "border": {
+          "omit": null,
+          "type": "string",
+          "enum": ["single", "double", "rounded", "hidden"]
+        },
+        "animateExplosion": {
+          "omit": null,
+          "type": "boolean"
+        }
+      },
+      "omit": {
+        "AnimateExplosion": "animateExplosion",
+        "AuthorColors": "authorColors",
+        "Border": "border",
+        "BranchColors": "branchColors",
+        "CommandLogSize": "commandLogSize",
+        "CommitLength": "commitLength",
+        "ExpandFocusedSidePanel": "expandFocusedSidePanel",
+        "Language": "language",
+        "MainPanelSplitMode": "mainPanelSplitMode",
+        "MouseEvents": "mouseEvents",
+        "NerdFontsVersion": "nerdFontsVersion",
+        "ScrollHeight": "scrollHeight",
+        "ScrollOffBehavior": "scrollOffBehavior",
+        "ScrollOffMargin": "scrollOffMargin",
+        "ScrollPastBottom": "scrollPastBottom",
+        "ShortTimeFormat": "shortTimeFormat",
+        "ShowBottomLine": "showBottomLine",
+        "ShowBranchCommitHash": "showBranchCommitHash",
+        "ShowCommandLog": "showCommandLog",
+        "ShowFileTree": "showFileTree",
+        "ShowIcons": "showIcons",
+        "ShowListFooter": "showListFooter",
+        "ShowPanelJumps": "showPanelJumps",
+        "ShowRandomTip": "showRandomTip",
+        "SidePanelWidth": "sidePanelWidth",
+        "SkipDiscardChangeWarning": "skipDiscardChangeWarning",
+        "SkipNoStagedFilesWarning": "skipNoStagedFilesWarning",
+        "SkipRewordInEditorWarning": "skipRewordInEditorWarning",
+        "SkipStashWarning": "skipStashWarning",
+        "SplitDiff": "splitDiff",
+        "Theme": "theme",
+        "TimeFormat": "timeFormat",
+        "WindowSize": "windowSize"
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "KeybindingBranchesConfig": {
+      "properties": {
+        "createPullRequest": {
+          "omit": null,
+          "type": "string"
+        },
+        "viewPullRequestOptions": {
+          "omit": null,
+          "type": "string"
+        },
+        "copyPullRequestURL": {
+          "omit": null,
+          "type": "string"
+        },
+        "checkoutBranchByName": {
+          "omit": null,
+          "type": "string"
+        },
+        "forceCheckoutBranch": {
+          "omit": null,
+          "type": "string"
+        },
+        "rebaseBranch": {
+          "omit": null,
+          "type": "string"
+        },
+        "renameBranch": {
+          "omit": null,
+          "type": "string"
+        },
+        "mergeIntoCurrentBranch": {
+          "omit": null,
+          "type": "string"
+        },
+        "viewGitFlowOptions": {
+          "omit": null,
+          "type": "string"
+        },
+        "fastForward": {
+          "omit": null,
+          "type": "string"
+        },
+        "createTag": {
+          "omit": null,
+          "type": "string"
+        },
+        "pushTag": {
+          "omit": null,
+          "type": "string"
+        },
+        "setUpstream": {
+          "omit": null,
+          "type": "string"
+        },
+        "fetchRemote": {
+          "omit": null,
+          "type": "string"
+        }
+      },
+      "omit": {
+        "CheckoutBranchByName": "checkoutBranchByName",
+        "CopyPullRequestURL": "copyPullRequestURL",
+        "CreatePullRequest": "createPullRequest",
+        "CreateTag": "createTag",
+        "FastForward": "fastForward",
+        "FetchRemote": "fetchRemote",
+        "ForceCheckoutBranch": "forceCheckoutBranch",
+        "MergeIntoCurrentBranch": "mergeIntoCurrentBranch",
+        "PushTag": "pushTag",
+        "RebaseBranch": "rebaseBranch",
+        "RenameBranch": "renameBranch",
+        "SetUpstream": "setUpstream",
+        "ViewGitFlowOptions": "viewGitFlowOptions",
+        "ViewPullRequestOptions": "viewPullRequestOptions"
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "KeybindingCommitFilesConfig": {
+      "properties": {
+        "checkoutCommitFile": {
+          "omit": null,
+          "type": "string"
+        }
+      },
+      "omit": {
+        "CheckoutCommitFile": "checkoutCommitFile"
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "KeybindingCommitMessageConfig": {
+      "properties": {
+        "switchToEditor": {
+          "omit": null,
+          "type": "string"
+        }
+      },
+      "omit": {
+        "SwitchToEditor": "switchToEditor"
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "KeybindingCommitsConfig": {
+      "properties": {
+        "squashDown": {
+          "omit": null,
+          "type": "string"
+        },
+        "renameCommit": {
+          "omit": null,
+          "type": "string"
+        },
+        "renameCommitWithEditor": {
+          "omit": null,
+          "type": "string"
+        },
+        "viewResetOptions": {
+          "omit": null,
+          "type": "string"
+        },
+        "markCommitAsFixup": {
+          "omit": null,
+          "type": "string"
+        },
+        "createFixupCommit": {
+          "omit": null,
+          "type": "string"
+        },
+        "squashAboveCommits": {
+          "omit": null,
+          "type": "string"
+        },
+        "moveDownCommit": {
+          "omit": null,
+          "type": "string"
+        },
+        "moveUpCommit": {
+          "omit": null,
+          "type": "string"
+        },
+        "amendToCommit": {
+          "omit": null,
+          "type": "string"
+        },
+        "resetCommitAuthor": {
+          "omit": null,
+          "type": "string"
+        },
+        "pickCommit": {
+          "omit": null,
+          "type": "string"
+        },
+        "revertCommit": {
+          "omit": null,
+          "type": "string"
+        },
+        "cherryPickCopy": {
+          "omit": null,
+          "type": "string"
+        },
+        "cherryPickCopyRange": {
+          "omit": null,
+          "type": "string"
+        },
+        "pasteCommits": {
+          "omit": null,
+          "type": "string"
+        },
+        "markCommitAsBaseForRebase": {
+          "omit": null,
+          "type": "string"
+        },
+        "tagCommit": {
+          "omit": null,
+          "type": "string"
+        },
+        "checkoutCommit": {
+          "omit": null,
+          "type": "string"
+        },
+        "resetCherryPick": {
+          "omit": null,
+          "type": "string"
+        },
+        "copyCommitAttributeToClipboard": {
+          "omit": null,
+          "type": "string"
+        },
+        "openLogMenu": {
+          "omit": null,
+          "type": "string"
+        },
+        "openInBrowser": {
+          "omit": null,
+          "type": "string"
+        },
+        "viewBisectOptions": {
+          "omit": null,
+          "type": "string"
+        }
+      },
+      "omit": {
+        "AmendToCommit": "amendToCommit",
+        "CheckoutCommit": "checkoutCommit",
+        "CherryPickCopy": "cherryPickCopy",
+        "CherryPickCopyRange": "cherryPickCopyRange",
+        "CopyCommitAttributeToClipboard": "copyCommitAttributeToClipboard",
+        "CreateFixupCommit": "createFixupCommit",
+        "CreateTag": "tagCommit",
+        "MarkCommitAsBaseForRebase": "markCommitAsBaseForRebase",
+        "MarkCommitAsFixup": "markCommitAsFixup",
+        "MoveDownCommit": "moveDownCommit",
+        "MoveUpCommit": "moveUpCommit",
+        "OpenInBrowser": "openInBrowser",
+        "OpenLogMenu": "openLogMenu",
+        "PasteCommits": "pasteCommits",
+        "PickCommit": "pickCommit",
+        "RenameCommit": "renameCommit",
+        "RenameCommitWithEditor": "renameCommitWithEditor",
+        "ResetCherryPick": "resetCherryPick",
+        "ResetCommitAuthor": "resetCommitAuthor",
+        "RevertCommit": "revertCommit",
+        "SquashAboveCommits": "squashAboveCommits",
+        "SquashDown": "squashDown",
+        "ViewBisectOptions": "viewBisectOptions",
+        "ViewResetOptions": "viewResetOptions"
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "KeybindingConfig": {
+      "properties": {
+        "universal": {
+          "$ref": "#/$defs/KeybindingUniversalConfig",
+          "omit": null
+        },
+        "status": {
+          "$ref": "#/$defs/KeybindingStatusConfig",
+          "omit": null
+        },
+        "files": {
+          "$ref": "#/$defs/KeybindingFilesConfig",
+          "omit": null
+        },
+        "branches": {
+          "$ref": "#/$defs/KeybindingBranchesConfig",
+          "omit": null
+        },
+        "worktrees": {
+          "$ref": "#/$defs/KeybindingWorktreesConfig",
+          "omit": null
+        },
+        "commits": {
+          "$ref": "#/$defs/KeybindingCommitsConfig",
+          "omit": null
+        },
+        "stash": {
+          "$ref": "#/$defs/KeybindingStashConfig",
+          "omit": null
+        },
+        "commitFiles": {
+          "$ref": "#/$defs/KeybindingCommitFilesConfig",
+          "omit": null
+        },
+        "main": {
+          "$ref": "#/$defs/KeybindingMainConfig",
+          "omit": null
+        },
+        "submodules": {
+          "$ref": "#/$defs/KeybindingSubmodulesConfig",
+          "omit": null
+        },
+        "commitMessage": {
+          "$ref": "#/$defs/KeybindingCommitMessageConfig",
+          "omit": null
+        }
+      },
+      "omit": {
+        "Branches": "branches",
+        "CommitFiles": "commitFiles",
+        "CommitMessage": "commitMessage",
+        "Commits": "commits",
+        "Files": "files",
+        "Main": "main",
+        "Stash": "stash",
+        "Status": "status",
+        "Submodules": "submodules",
+        "Universal": "universal",
+        "Worktrees": "worktrees"
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "KeybindingFilesConfig": {
+      "properties": {
+        "commitChanges": {
+          "omit": null,
+          "type": "string"
+        },
+        "commitChangesWithoutHook": {
+          "omit": null,
+          "type": "string"
+        },
+        "amendLastCommit": {
+          "omit": null,
+          "type": "string"
+        },
+        "commitChangesWithEditor": {
+          "omit": null,
+          "type": "string"
+        },
+        "confirmDiscard": {
+          "omit": null,
+          "type": "string"
+        },
+        "ignoreFile": {
+          "omit": null,
+          "type": "string"
+        },
+        "refreshFiles": {
+          "omit": null,
+          "type": "string"
+        },
+        "stashAllChanges": {
+          "omit": null,
+          "type": "string"
+        },
+        "viewStashOptions": {
+          "omit": null,
+          "type": "string"
+        },
+        "toggleStagedAll": {
+          "omit": null,
+          "type": "string"
+        },
+        "viewResetOptions": {
+          "omit": null,
+          "type": "string"
+        },
+        "fetch": {
+          "omit": null,
+          "type": "string"
+        },
+        "toggleTreeView": {
+          "omit": null,
+          "type": "string"
+        },
+        "openMergeTool": {
+          "omit": null,
+          "type": "string"
+        },
+        "openStatusFilter": {
+          "omit": null,
+          "type": "string"
+        }
+      },
+      "omit": {
+        "AmendLastCommit": "amendLastCommit",
+        "CommitChanges": "commitChanges",
+        "CommitChangesWithEditor": "commitChangesWithEditor",
+        "CommitChangesWithoutHook": "commitChangesWithoutHook",
+        "ConfirmDiscard": "confirmDiscard",
+        "Fetch": "fetch",
+        "IgnoreFile": "ignoreFile",
+        "OpenMergeTool": "openMergeTool",
+        "OpenStatusFilter": "openStatusFilter",
+        "RefreshFiles": "refreshFiles",
+        "StashAllChanges": "stashAllChanges",
+        "ToggleStagedAll": "toggleStagedAll",
+        "ToggleTreeView": "toggleTreeView",
+        "ViewResetOptions": "viewResetOptions",
+        "ViewStashOptions": "viewStashOptions"
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "KeybindingMainConfig": {
+      "properties": {
+        "toggleDragSelect": {
+          "omit": null,
+          "type": "string"
+        },
+        "toggleDragSelect-alt": {
+          "omit": null,
+          "type": "string"
+        },
+        "toggleSelectHunk": {
+          "omit": null,
+          "type": "string"
+        },
+        "pickBothHunks": {
+          "omit": null,
+          "type": "string"
+        },
+        "editSelectHunk": {
+          "omit": null,
+          "type": "string"
+        }
+      },
+      "omit": {
+        "EditSelectHunk": "editSelectHunk",
+        "PickBothHunks": "pickBothHunks",
+        "ToggleDragSelect": "toggleDragSelect",
+        "ToggleDragSelectAlt": "toggleDragSelect-alt",
+        "ToggleSelectHunk": "toggleSelectHunk"
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "KeybindingStashConfig": {
+      "properties": {
+        "popStash": {
+          "omit": null,
+          "type": "string"
+        },
+        "renameStash": {
+          "omit": null,
+          "type": "string"
+        }
+      },
+      "omit": {
+        "PopStash": "popStash",
+        "RenameStash": "renameStash"
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "KeybindingStatusConfig": {
+      "properties": {
+        "checkForUpdate": {
+          "omit": null,
+          "type": "string"
+        },
+        "recentRepos": {
+          "omit": null,
+          "type": "string"
+        },
+        "allBranchesLogGraph": {
+          "omit": null,
+          "type": "string"
+        }
+      },
+      "omit": {
+        "AllBranchesLogGraph": "allBranchesLogGraph",
+        "CheckForUpdate": "checkForUpdate",
+        "RecentRepos": "recentRepos"
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "KeybindingSubmodulesConfig": {
+      "properties": {
+        "init": {
+          "omit": null,
+          "type": "string"
+        },
+        "update": {
+          "omit": null,
+          "type": "string"
+        },
+        "bulkMenu": {
+          "omit": null,
+          "type": "string"
+        }
+      },
+      "omit": {
+        "BulkMenu": "bulkMenu",
+        "Init": "init",
+        "Update": "update"
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "KeybindingUniversalConfig": {
+      "properties": {
+        "quit": {
+          "omit": null,
+          "type": "string"
+        },
+        "quit-alt1": {
+          "omit": null,
+          "type": "string"
+        },
+        "return": {
+          "omit": null,
+          "type": "string"
+        },
+        "quitWithoutChangingDirectory": {
+          "omit": null,
+          "type": "string"
+        },
+        "togglePanel": {
+          "omit": null,
+          "type": "string"
+        },
+        "prevItem": {
+          "omit": null,
+          "type": "string"
+        },
+        "nextItem": {
+          "omit": null,
+          "type": "string"
+        },
+        "prevItem-alt": {
+          "omit": null,
+          "type": "string"
+        },
+        "nextItem-alt": {
+          "omit": null,
+          "type": "string"
+        },
+        "prevPage": {
+          "omit": null,
+          "type": "string"
+        },
+        "nextPage": {
+          "omit": null,
+          "type": "string"
+        },
+        "scrollLeft": {
+          "omit": null,
+          "type": "string"
+        },
+        "scrollRight": {
+          "omit": null,
+          "type": "string"
+        },
+        "gotoTop": {
+          "omit": null,
+          "type": "string"
+        },
+        "gotoBottom": {
+          "omit": null,
+          "type": "string"
+        },
+        "prevBlock": {
+          "omit": null,
+          "type": "string"
+        },
+        "nextBlock": {
+          "omit": null,
+          "type": "string"
+        },
+        "prevBlock-alt": {
+          "omit": null,
+          "type": "string"
+        },
+        "nextBlock-alt": {
+          "omit": null,
+          "type": "string"
+        },
+        "nextBlock-alt2": {
+          "omit": null,
+          "type": "string"
+        },
+        "prevBlock-alt2": {
+          "omit": null,
+          "type": "string"
+        },
+        "jumpToBlock": {
+          "items": {
+            "omit": null,
+            "type": "string"
+          },
+          "omit": null,
+          "type": "array",
+          "default": ["1", "2", "3", "4", "5"]
+        },
+        "nextMatch": {
+          "omit": null,
+          "type": "string"
+        },
+        "prevMatch": {
+          "omit": null,
+          "type": "string"
+        },
+        "startSearch": {
+          "omit": null,
+          "type": "string"
+        },
+        "optionMenu": {
+          "omit": null,
+          "type": "string"
+        },
+        "optionMenu-alt1": {
+          "omit": null,
+          "type": "string"
+        },
+        "select": {
+          "omit": null,
+          "type": "string"
+        },
+        "goInto": {
+          "omit": null,
+          "type": "string"
+        },
+        "confirm": {
+          "omit": null,
+          "type": "string"
+        },
+        "confirmInEditor": {
+          "omit": null,
+          "type": "string"
+        },
+        "remove": {
+          "omit": null,
+          "type": "string"
+        },
+        "new": {
+          "omit": null,
+          "type": "string"
+        },
+        "edit": {
+          "omit": null,
+          "type": "string",
+          "examples": [
+            "vim",
+            "nvim",
+            "emacs",
+            "nano",
+            "vscode",
+            "sublime",
+            "bbedit",
+            "kakoune",
+            "helix",
+            "xcode"
+          ]
+        },
+        "openFile": {
+          "omit": null,
+          "type": "string"
+        },
+        "scrollUpMain": {
+          "omit": null,
+          "type": "string"
+        },
+        "scrollDownMain": {
+          "omit": null,
+          "type": "string"
+        },
+        "scrollUpMain-alt1": {
+          "omit": null,
+          "type": "string"
+        },
+        "scrollDownMain-alt1": {
+          "omit": null,
+          "type": "string"
+        },
+        "scrollUpMain-alt2": {
+          "omit": null,
+          "type": "string"
+        },
+        "scrollDownMain-alt2": {
+          "omit": null,
+          "type": "string"
+        },
+        "executeCustomCommand": {
+          "omit": null,
+          "type": "string"
+        },
+        "createRebaseOptionsMenu": {
+          "omit": null,
+          "type": "string"
+        },
+        "pushFiles": {
+          "omit": null,
+          "type": "string"
+        },
+        "pullFiles": {
+          "omit": null,
+          "type": "string"
+        },
+        "refresh": {
+          "omit": null,
+          "type": "string"
+        },
+        "createPatchOptionsMenu": {
+          "omit": null,
+          "type": "string"
+        },
+        "nextTab": {
+          "omit": null,
+          "type": "string"
+        },
+        "prevTab": {
+          "omit": null,
+          "type": "string"
+        },
+        "nextScreenMode": {
+          "omit": null,
+          "type": "string"
+        },
+        "prevScreenMode": {
+          "omit": null,
+          "type": "string"
+        },
+        "undo": {
+          "omit": null,
+          "type": "string"
+        },
+        "redo": {
+          "omit": null,
+          "type": "string"
+        },
+        "filteringMenu": {
+          "omit": null,
+          "type": "string"
+        },
+        "diffingMenu": {
+          "omit": null,
+          "type": "string"
+        },
+        "diffingMenu-alt": {
+          "omit": null,
+          "type": "string"
+        },
+        "copyToClipboard": {
+          "omit": null,
+          "type": "string"
+        },
+        "openRecentRepos": {
+          "omit": null,
+          "type": "string"
+        },
+        "submitEditorText": {
+          "omit": null,
+          "type": "string"
+        },
+        "extrasMenu": {
+          "omit": null,
+          "type": "string"
+        },
+        "toggleWhitespaceInDiffView": {
+          "omit": null,
+          "type": "string"
+        },
+        "increaseContextInDiffView": {
+          "omit": null,
+          "type": "string"
+        },
+        "decreaseContextInDiffView": {
+          "omit": null,
+          "type": "string"
+        }
+      },
+      "omit": {
+        "Confirm": "confirm",
+        "ConfirmInEditor": "confirmInEditor",
+        "CopyToClipboard": "copyToClipboard",
+        "CreatePatchOptionsMenu": "createPatchOptionsMenu",
+        "CreateRebaseOptionsMenu": "createRebaseOptionsMenu",
+        "DecreaseContextInDiffView": "decreaseContextInDiffView",
+        "DiffingMenu": "diffingMenu",
+        "DiffingMenuAlt": "diffingMenu-alt",
+        "Edit": "edit",
+        "ExecuteCustomCommand": "executeCustomCommand",
+        "ExtrasMenu": "extrasMenu",
+        "FilteringMenu": "filteringMenu",
+        "GoInto": "goInto",
+        "GotoBottom": "gotoBottom",
+        "GotoTop": "gotoTop",
+        "IncreaseContextInDiffView": "increaseContextInDiffView",
+        "JumpToBlock": "jumpToBlock",
+        "New": "new",
+        "NextBlock": "nextBlock",
+        "NextBlockAlt": "nextBlock-alt",
+        "NextBlockAlt2": "nextBlock-alt2",
+        "NextItem": "nextItem",
+        "NextItemAlt": "nextItem-alt",
+        "NextMatch": "nextMatch",
+        "NextPage": "nextPage",
+        "NextScreenMode": "nextScreenMode",
+        "NextTab": "nextTab",
+        "OpenFile": "openFile",
+        "OpenRecentRepos": "openRecentRepos",
+        "OptionMenu": "optionMenu",
+        "OptionMenuAlt1": "optionMenu-alt1",
+        "PrevBlock": "prevBlock",
+        "PrevBlockAlt": "prevBlock-alt",
+        "PrevBlockAlt2": "prevBlock-alt2",
+        "PrevItem": "prevItem",
+        "PrevItemAlt": "prevItem-alt",
+        "PrevMatch": "prevMatch",
+        "PrevPage": "prevPage",
+        "PrevScreenMode": "prevScreenMode",
+        "PrevTab": "prevTab",
+        "Pull": "pullFiles",
+        "Push": "pushFiles",
+        "Quit": "quit",
+        "QuitAlt1": "quit-alt1",
+        "QuitWithoutChangingDirectory": "quitWithoutChangingDirectory",
+        "Redo": "redo",
+        "Refresh": "refresh",
+        "Remove": "remove",
+        "Return": "return",
+        "ScrollDownMain": "scrollDownMain",
+        "ScrollDownMainAlt1": "scrollDownMain-alt1",
+        "ScrollDownMainAlt2": "scrollDownMain-alt2",
+        "ScrollLeft": "scrollLeft",
+        "ScrollRight": "scrollRight",
+        "ScrollUpMain": "scrollUpMain",
+        "ScrollUpMainAlt1": "scrollUpMain-alt1",
+        "ScrollUpMainAlt2": "scrollUpMain-alt2",
+        "Select": "select",
+        "StartSearch": "startSearch",
+        "SubmitEditorText": "submitEditorText",
+        "TogglePanel": "togglePanel",
+        "ToggleWhitespaceInDiffView": "toggleWhitespaceInDiffView",
+        "Undo": "undo"
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "KeybindingWorktreesConfig": {
+      "properties": {
+        "viewWorktreeOptions": {
+          "omit": null,
+          "type": "string"
+        }
+      },
+      "omit": {
+        "ViewWorktreeOptions": "viewWorktreeOptions"
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "LogConfig": {
+      "properties": {
+        "order": {
+          "omit": null,
+          "type": "string",
+          "enum": ["date-order", "author-date-order", "topo-order", "default"]
+        },
+        "showGraph": {
+          "omit": null,
+          "type": "string",
+          "enum": ["always", "never", "when-maximised"]
+        },
+        "showWholeGraph": {
+          "omit": null,
+          "type": "boolean"
+        }
+      },
+      "omit": {
+        "Order": "order",
+        "ShowGraph": "showGraph",
+        "ShowWholeGraph": "showWholeGraph"
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "MergingConfig": {
+      "properties": {
+        "manualCommit": {
+          "omit": null,
+          "type": "boolean"
+        },
+        "args": {
+          "omit": null,
+          "type": "string",
+          "examples": ["--no-ff"]
+        }
+      },
+      "omit": {
+        "Args": "args",
+        "ManualCommit": "manualCommit"
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "OSConfig": {
+      "properties": {
+        "edit": {
+          "omit": null,
+          "type": "string"
+        },
+        "editAtLine": {
+          "omit": null,
+          "type": "string"
+        },
+        "editAtLineAndWait": {
+          "omit": null,
+          "type": "string"
+        },
+        "editInTerminal": {
+          "omit": null,
+          "type": "boolean"
+        },
+        "openDirInEditor": {
+          "omit": null,
+          "type": "string"
+        },
+        "editPreset": {
+          "omit": null,
+          "type": "string"
+        },
+        "open": {
+          "omit": null,
+          "type": "string"
+        },
+        "openLink": {
+          "omit": null,
+          "type": "string"
+        },
+        "editCommand": {
+          "omit": null,
+          "type": "string"
+        },
+        "editCommandTemplate": {
+          "omit": null,
+          "type": "string"
+        },
+        "openCommand": {
+          "omit": null,
+          "type": "string"
+        },
+        "openLinkCommand": {
+          "omit": null,
+          "type": "string"
+        },
+        "copyToClipboardCmd": {
+          "omit": null,
+          "type": "string"
+        }
+      },
+      "omit": {
+        "CopyToClipboardCmd": "copyToClipboardCmd",
+        "Edit": "edit",
+        "EditAtLine": "editAtLine",
+        "EditAtLineAndWait": "editAtLineAndWait",
+        "EditCommand": "editCommand",
+        "EditCommandTemplate": "editCommandTemplate",
+        "EditPreset": "editPreset",
+        "Open": "open",
+        "OpenCommand": "openCommand",
+        "OpenDirInEditor": "openDirInEditor",
+        "OpenLink": "openLink",
+        "OpenLinkCommand": "openLinkCommand",
+        "SuspendOnEdit": "editInTerminal"
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "PagingConfig": {
+      "properties": {
+        "colorArg": {
+          "omit": null,
+          "type": "string",
+          "enum": ["always", "never"]
+        },
+        "pager": {
+          "omit": null,
+          "type": "string",
+          "minLength": 1,
+          "examples": ["diff-so-fancy"]
+        },
+        "useConfig": {
+          "omit": null,
+          "type": "boolean"
+        },
+        "externalDiffCommand": {
+          "omit": null,
+          "type": "string"
+        }
+      },
+      "omit": {
+        "ColorArg": "colorArg",
+        "ExternalDiffCommand": "externalDiffCommand",
+        "Pager": "pager",
+        "UseConfig": "useConfig"
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "RefresherConfig": {
+      "properties": {
+        "refreshInterval": {
+          "omit": null,
+          "type": "integer",
+          "minimum": 0
+        },
+        "fetchInterval": {
+          "omit": null,
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "omit": {
+        "FetchInterval": "fetchInterval",
+        "RefreshInterval": "refreshInterval"
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "ThemeConfig": {
+      "properties": {
+        "activeBorderColor": {
+          "items": {
+            "omit": null,
+            "type": "string"
+          },
+          "omit": null,
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "default": ["green", "bold"]
+        },
+        "inactiveBorderColor": {
+          "items": {
+            "omit": null,
+            "type": "string"
+          },
+          "omit": null,
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "default": ["default"]
+        },
+        "searchingActiveBorderColor": {
+          "items": {
+            "omit": null,
+            "type": "string"
+          },
+          "omit": null,
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "default": ["cyan", "bold"]
+        },
+        "optionsTextColor": {
+          "items": {
+            "omit": null,
+            "type": "string"
+          },
+          "omit": null,
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "default": ["blue"]
+        },
+        "selectedLineBgColor": {
+          "items": {
+            "omit": null,
+            "type": "string"
+          },
+          "omit": null,
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "default": ["blue"]
+        },
+        "selectedRangeBgColor": {
+          "items": {
+            "omit": null,
+            "type": "string"
+          },
+          "omit": null,
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "default": ["blue"]
+        },
+        "cherryPickedCommitFgColor": {
+          "items": {
+            "omit": null,
+            "type": "string"
+          },
+          "omit": null,
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "default": ["blue"]
+        },
+        "cherryPickedCommitBgColor": {
+          "items": {
+            "omit": null,
+            "type": "string"
+          },
+          "omit": null,
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "default": ["cyan"]
+        },
+        "markedBaseCommitFgColor": {
+          "items": {
+            "omit": null,
+            "type": "string"
+          },
+          "omit": null,
+          "type": "array",
+          "default": ["blue"]
+        },
+        "markedBaseCommitBgColor": {
+          "items": {
+            "omit": null,
+            "type": "string"
+          },
+          "omit": null,
+          "type": "array",
+          "default": ["yellow"]
+        },
+        "unstagedChangesColor": {
+          "items": {
+            "omit": null,
+            "type": "string"
+          },
+          "omit": null,
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "default": ["red"]
+        },
+        "defaultFgColor": {
+          "items": {
+            "omit": null,
+            "type": "string"
+          },
+          "omit": null,
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "default": ["default"]
+        }
+      },
+      "omit": {
+        "ActiveBorderColor": "activeBorderColor",
+        "CherryPickedCommitBgColor": "cherryPickedCommitBgColor",
+        "CherryPickedCommitFgColor": "cherryPickedCommitFgColor",
+        "DefaultFgColor": "defaultFgColor",
+        "InactiveBorderColor": "inactiveBorderColor",
+        "MarkedBaseCommitBgColor": "markedBaseCommitBgColor",
+        "MarkedBaseCommitFgColor": "markedBaseCommitFgColor",
+        "OptionsTextColor": "optionsTextColor",
+        "SearchingActiveBorderColor": "searchingActiveBorderColor",
+        "SelectedLineBgColor": "selectedLineBgColor",
+        "SelectedRangeBgColor": "selectedRangeBgColor",
+        "UnstagedChangesColor": "unstagedChangesColor"
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "UpdateConfig": {
+      "properties": {
+        "method": {
+          "omit": null,
+          "type": "string",
+          "enum": ["prompt", "background", "never"]
+        },
+        "days": {
+          "omit": null,
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "omit": {
+        "Days": "days",
+        "Method": "method"
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "UserConfig": {
+      "properties": {
+        "gui": {
+          "$ref": "#/$defs/GuiConfig",
+          "omit": null
+        },
+        "git": {
+          "$ref": "#/$defs/GitConfig",
+          "omit": null
+        },
+        "update": {
+          "$ref": "#/$defs/UpdateConfig",
+          "omit": null
+        },
+        "refresher": {
+          "$ref": "#/$defs/RefresherConfig",
+          "omit": null
+        },
+        "confirmOnQuit": {
+          "omit": null,
+          "type": "boolean"
+        },
+        "quitOnTopLevelReturn": {
+          "omit": null,
+          "type": "boolean"
+        },
+        "keybinding": {
+          "$ref": "#/$defs/KeybindingConfig",
+          "omit": null
+        },
+        "os": {
+          "$ref": "#/$defs/OSConfig",
+          "omit": null
+        },
+        "disableStartupPopups": {
+          "omit": null,
+          "type": "boolean"
+        },
+        "customCommands": {
+          "items": {
+            "$ref": "#/$defs/CustomCommand",
+            "omit": null
+          },
+          "omit": null,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "services": {
+          "omit": null,
+          "additionalProperties": {
+            "omit": null,
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "notARepository": {
+          "omit": null,
+          "type": "string",
+          "enum": ["prompt", "create", "skip", "quit"]
+        },
+        "promptToReturnFromSubprocess": {
+          "omit": null,
+          "type": "boolean"
+        }
+      },
+      "omit": {
+        "ConfirmOnQuit": "confirmOnQuit",
+        "CustomCommands": "customCommands",
+        "DisableStartupPopups": "disableStartupPopups",
+        "Git": "git",
+        "Gui": "gui",
+        "Keybinding": "keybinding",
+        "NotARepository": "notARepository",
+        "OS": "os",
+        "PromptToReturnFromSubprocess": "promptToReturnFromSubprocess",
+        "QuitOnTopLevelReturn": "quitOnTopLevelReturn",
+        "Refresher": "refresher",
+        "Services": "services",
+        "Update": "update"
+      },
+      "additionalProperties": false,
+      "type": "object"
+    }
+  },
+  "omit": null
+}
