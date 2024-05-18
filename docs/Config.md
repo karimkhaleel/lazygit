@@ -30,16 +30,11 @@ to the top of your config file or via [Visual Studio Code settings.json config][
 ## Default
 
 ```yaml
-# Config relating to the Lazygit UI
-gui:
-  # The number of lines you scroll by when scrolling the main window
-  scrollHeight: 2
-  # If true, allow scrolling past the bottom of the content in the main window
-  scrollPastBottom: true
-  # See https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md#scroll-off-margin
-  scrollOffMargin: 2
-  # One of: 'margin' (default) | 'jump'
-  scrollOffBehavior: margin
+gui: # Config relating to the Lazygit UI
+  scrollHeight: 2 # The number of lines you scroll by when scrolling the main window
+  scrollPastBottom: true # If true, allow scrolling past the bottom of the content in the main window
+  scrollOffMargin: 2 # See https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md#scroll-off-margin
+  scrollOffBehavior: margin # One of: 'margin' (default) | 'jump'
   # If true, capture mouse events.
   # When mouse events are captured, it's a little harder to select text: e.g. requiring you to hold the option key when on macOS.
   mouseEvents: true
@@ -57,8 +52,7 @@ gui:
   # - 'left': split the window horizontally (side panel on the left, main view on the right)
   # - 'top': split the window vertically (side panel on top, main view below)
   enlargedSideViewLocation: left
-  # One of 'auto' (default) | 'en' | 'zh-CN' | 'zh-TW' | 'pl' | 'nl' | 'ja' | 'ko' | 'ru'
-  language: auto
+  language: auto # One of 'auto' (default) | 'en' | 'zh-CN' | 'zh-TW' | 'pl' | 'nl' | 'ja' | 'ko' | 'ru'
   # Format used when displaying time e.g. commit time.
   # Uses Go's time format syntax: https://pkg.go.dev/time#Time.Format
   timeFormat: 02 Jan 06
@@ -68,69 +62,49 @@ gui:
   # Config relating to colors and styles.
   # See https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md#color-attributes
   theme:
-    # Border color of focused window
-    activeBorderColor:
+    activeBorderColor: # Border color of focused window
       - green
       - bold
-    # Border color of non-focused windows
-    inactiveBorderColor:
+    inactiveBorderColor: # Border color of non-focused windows
       - default
-    # Border color of focused window when searching in that window
-    searchingActiveBorderColor:
+    searchingActiveBorderColor: # Border color of focused window when searching in that window
       - cyan
       - bold
-    # Color of keybindings help text in the bottom line
-    optionsTextColor:
+    optionsTextColor: # Color of keybindings help text in the bottom line
       - blue
     # Background color of selected line.
     # See https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md#highlighting-the-selected-line
     selectedLineBgColor:
       - blue
-    # Foreground color of copied commit
-    cherryPickedCommitFgColor:
+    cherryPickedCommitFgColor: # Foreground color of copied commit
       - blue
-    # Background color of copied commit
-    cherryPickedCommitBgColor:
+    cherryPickedCommitBgColor: # Background color of copied commit
       - cyan
-    # Foreground color of marked base commit (for rebase)
-    markedBaseCommitFgColor:
+    markedBaseCommitFgColor: # Foreground color of marked base commit (for rebase)
       - blue
-    # Background color of marked base commit (for rebase)
-    markedBaseCommitBgColor:
+    markedBaseCommitBgColor: # Background color of marked base commit (for rebase)
       - yellow
-    # Color for file with unstaged changes
-    unstagedChangesColor:
+    unstagedChangesColor: # Color for file with unstaged changes
       - red
-    # Default text color
-    defaultFgColor:
+    defaultFgColor: # Default text color
       - default
-  # Config relating to the commit length indicator
-  commitLength:
-    # If true, show an indicator of commit message length
-    show: true
-  # If true, show the '5 of 20' footer at the bottom of list views
-  showListFooter: true
+  commitLength: # Config relating to the commit length indicator
+    show: true # If true, show an indicator of commit message length
+  showListFooter: true # If true, show the '5 of 20' footer at the bottom of list views
   # If true, display the files in the file views as a tree. If false, display the files as a flat list.
   # This can be toggled from within Lazygit with the '~' key, but that will not change the default.
   showFileTree: true
-  # If true, show a random tip in the command log when Lazygit starts
-  showRandomTip: true
-  # If true, show the command log
-  showCommandLog: true
-  # If true, show the bottom line that contains keybinding info and useful buttons. If false, this line will be hidden except to display a loader for an in-progress action.
-  showBottomLine: true
-  # If true, show jump-to-window keybindings in window titles.
-  showPanelJumps: true
+  showRandomTip: true # If true, show a random tip in the command log when Lazygit starts
+  showCommandLog: true # If true, show the command log
+  showBottomLine: true # If true, show the bottom line that contains keybinding info and useful buttons. If false, this line will be hidden except to display a loader for an in-progress action.
+  showPanelJumps: true # If true, show jump-to-window keybindings in window titles.
   # Nerd fonts version to use.
   # One of: '2' | '3' | empty string (default)
   # If empty, do not show icons.
   nerdFontsVersion: ""
-  # If true (default), file icons are shown in the file views. Only relevant if NerdFontsVersion is not empty.
-  showFileIcons: true
-  # Length of commit hash in commits view. 0 shows '*' if NF icons aren't on.
-  commitHashLength: 8
-  # Height of the command log view
-  commandLogSize: 8
+  showFileIcons: true # If true (default), file icons are shown in the file views. Only relevant if NerdFontsVersion is not empty.
+  commitHashLength: 8 # Length of commit hash in commits view. 0 shows '*' if NF icons aren't on.
+  commandLogSize: 8 # Height of the command log view
   # Whether to split the main window when viewing file changes.
   # One of: 'auto' | 'always'
   # If 'auto', only split the main window when a file has both staged and unstaged changes
@@ -141,102 +115,75 @@ gui:
   # Window border style.
   # One of 'rounded' (default) | 'single' | 'double' | 'hidden'
   border: rounded
-  # If true, show a seriously epic explosion animation when nuking the working tree.
-  animateExplosion: true
+  animateExplosion: true # If true, show a seriously epic explosion animation when nuking the working tree.
   # Whether to stack UI components on top of each other.
   # One of 'auto' (default) | 'always' | 'never'
   portraitMode: auto
   # How things are filtered when typing '/'.
   # One of 'substring' (default) | 'fuzzy'
   filterMode: substring
-  # Config relating to the spinner.
-  spinner:
-    # The frames of the spinner animation.
-    frames:
+  spinner: # Config relating to the spinner.
+    frames: # The frames of the spinner animation.
       - '|'
       - /
       - '-'
       - \
-    # The "speed" of the spinner in milliseconds.
-    rate: 50
+    rate: 50 # The "speed" of the spinner in milliseconds.
   # Status panel view.
   # One of 'dashboard' (default) | 'allBranchesLog'
   statusPanelView: dashboard
-# Config relating to git
-git:
-  # See https://github.com/jesseduffield/lazygit/blob/master/docs/Custom_Pagers.md
-  paging:
-    # Value of the --color arg in the git diff command. Some pagers want this to be set to 'always' and some want it set to 'never'
-    colorArg: always
+git: # Config relating to git
+  paging: # See https://github.com/jesseduffield/lazygit/blob/master/docs/Custom_Pagers.md
+    colorArg: always # Value of the --color arg in the git diff command. Some pagers want this to be set to 'always' and some want it set to 'never'
     # e.g.
     # diff-so-fancy
     # delta --dark --paging=never
     # ydiff -p cat -s --wrap --width={{columnWidth}}
     pager: ""
-    # e.g. 'difft --color=always'
-    externalDiffCommand: ""
-  # Config relating to committing
-  commit:
-    # Automatic WYSIWYG wrapping of the commit message as you type
-    autoWrapCommitMessage: true
-    # If autoWrapCommitMessage is true, the width to wrap to
-    autoWrapWidth: 72
-  # Config relating to merging
-  merging:
-    # Extra args passed to `git merge`, e.g. --no-ff
-    args: ""
-  # list of branches that are considered 'main' branches, used when displaying commits
-  mainBranches:
+    externalDiffCommand: "" # e.g. 'difft --color=always'
+  commit: # Config relating to committing
+    autoWrapCommitMessage: true # Automatic WYSIWYG wrapping of the commit message as you type
+    autoWrapWidth: 72 # If autoWrapCommitMessage is true, the width to wrap to
+  merging: # Config relating to merging
+    args: "" # Extra args passed to `git merge`, e.g. --no-ff
+  mainBranches: # list of branches that are considered 'main' branches, used when displaying commits
     - master
     - main
-  # Prefix to use when skipping hooks. E.g. if set to 'WIP', then pre-commit hooks will be skipped when the commit message starts with 'WIP'
-  skipHookPrefix: WIP
-  # If true, periodically fetch from remote
-  autoFetch: true
-  # If true, periodically refresh files and submodules
-  autoRefresh: true
-  # If true, pass the --all arg to git fetch
-  fetchAll: true
-  # Command used when displaying the current branch git log in the main window
-  branchLogCmd: git log --graph --color=always --abbrev-commit --decorate --date=relative --pretty=medium {{branchName}} --
-  # Command used to display git log of all branches in the main window
-  allBranchesLogCmd: git log --graph --all --color=always --abbrev-commit --decorate --date=relative  --pretty=medium
-  # See https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md#predefined-commit-message-prefix
-  commitPrefix:
-    # pattern to match on. E.g. for 'feature/AB-123' to match on the AB-123 use "^\\w+\\/(\\w+-\\w+).*"
-    pattern: ""
-    # Replace directive. E.g. for 'feature/AB-123' to start the commit message with 'AB-123 ' use "[$1] "
-    replace: ""
-  # Config for showing the log in the commits view
-  log:
+  skipHookPrefix: WIP # Prefix to use when skipping hooks. E.g. if set to 'WIP', then pre-commit hooks will be skipped when the commit message starts with 'WIP'
+  autoFetch: true # If true, periodically fetch from remote
+  autoRefresh: true # If true, periodically refresh files and submodules
+  fetchAll: true # If true, pass the --all arg to git fetch
+  branchLogCmd: git log --graph --color=always --abbrev-commit --decorate --date=relative --pretty=medium {{branchName}} -- # Command used when displaying the current branch git log in the main window
+  allBranchesLogCmd: git log --graph --all --color=always --abbrev-commit --decorate --date=relative  --pretty=medium # Command used to display git log of all branches in the main window
+  commitPrefix: # See https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md#predefined-commit-message-prefix
+    pattern: "" # pattern to match on. E.g. for 'feature/AB-123' to match on the AB-123 use "^\\w+\\/(\\w+-\\w+).*"
+    replace: "" # Replace directive. E.g. for 'feature/AB-123' to start the commit message with 'AB-123 ' use "[$1] "
+  log: # Config for showing the log in the commits view
     # One of: 'date-order' | 'author-date-order' | 'topo-order' | 'default'
     # 'topo-order' makes it easier to read the git log graph, but commits may not
     # appear chronologically. See https://git-scm.com/docs/
+    #
     # Deprecated: Configure this with `Log menu -> Commit sort order` (<c-l> in the commits window by default).
     order: topo-order
     # This determines whether the git graph is rendered in the commits panel
     # One of 'always' | 'never' | 'when-maximised'
+    #
     # Deprecated: Configure this with `Log menu -> Show git graph` (<c-l> in the commits window by default).
     showGraph: always
   # When copying commit hashes to the clipboard, truncate them to this
   # length. Set to 40 to disable truncation.
   truncateCopiedCommitHashesTo: 12
-# Periodic update checks
-update:
-  # One of: 'prompt' (default) | 'background' | 'never'
-  method: prompt
-  # Period in days between update checks
-  days: 14
-# Background refreshes
-refresher:
+update: # Periodic update checks
+  method: prompt # One of: 'prompt' (default) | 'background' | 'never'
+  days: 14 # Period in days between update checks
+refresher: # Background refreshes
   # File/submodule refresh interval in seconds.
   # Auto-refresh can be disabled via option 'git.autoRefresh'.
   refreshInterval: 10
   # Re-fetch interval in seconds.
   # Auto-fetch can be disabled via option 'git.autoFetch'.
   fetchInterval: 60
-# Keybindings
-keybinding:
+keybinding: # Keybindings
   universal:
     quit: q
     quit-alt1: <c-c>
@@ -289,10 +236,8 @@ keybinding:
     scrollDownMain-alt2: <c-d>
     executeCustomCommand: ':'
     createRebaseOptionsMenu: m
-    # 'Files' appended for legacy reasons
-    pushFiles: P
-    # 'Files' appended for legacy reasons
-    pullFiles: p
+    pushFiles: P # 'Files' appended for legacy reasons
+    pullFiles: p # 'Files' appended for legacy reasons
     refresh: R
     createPatchOptionsMenu: <c-p>
     nextTab: ']'
@@ -396,26 +341,22 @@ keybinding:
     bulkMenu: b
   commitMessage:
     commitMenu: <c-o>
-# Config relating to things outside of Lazygit like how files are opened, copying to clipboard, etc
-os:
-  # Command for editing a file. Should contain "{{filename}}".
-  edit: ""
+os: # Config relating to things outside of Lazygit like how files are opened, copying to clipboard, etc
+  edit: "" # Command for editing a file. Should contain "{{filename}}".
   # Command for editing a file at a given line number. Should contain
   # "{{filename}}", and may optionally contain "{{line}}".
   editAtLine: ""
   # Same as EditAtLine, except that the command needs to wait until the
   # window is closed.
   editAtLineAndWait: ""
-  # For opening a directory in an editor
-  openDirInEditor: ""
+  openDirInEditor: "" # For opening a directory in an editor
   # A built-in preset that sets all of the above settings. Supported presets
   # are defined in the getPreset function in editor_presets.go.
   editPreset: ""
   # Command for opening a file, as if the file is double-clicked. Should
   # contain "{{filename}}", but doesn't support "{{line}}".
   open: ""
-  # Command for opening a link. Should contain "{{link}}".
-  openLink: ""
+  openLink: "" # Command for opening a link. Should contain "{{link}}".
   # EditCommand is the command for editing a file.
   # Deprecated: use Edit instead. Note that semantics are different:
   # EditCommand is just the command itself, whereas Edit contains a
@@ -439,8 +380,7 @@ os:
 # - 'skip': open most recent repo
 # - 'quit': exit Lazygit
 notARepository: prompt
-# If true, display a confirmation when subprocess terminates. This allows you to view the output of the subprocess before returning to Lazygit.
-promptToReturnFromSubprocess: true
+promptToReturnFromSubprocess: true # If true, display a confirmation when subprocess terminates. This allows you to view the output of the subprocess before returning to Lazygit.
 ```
 
 ## Platform Defaults
