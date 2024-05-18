@@ -158,18 +158,6 @@ git: # Config relating to git
   commitPrefix: # See https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md#predefined-commit-message-prefix
     pattern: "" # pattern to match on. E.g. for 'feature/AB-123' to match on the AB-123 use "^\\w+\\/(\\w+-\\w+).*"
     replace: "" # Replace directive. E.g. for 'feature/AB-123' to start the commit message with 'AB-123 ' use "[$1] "
-  log: # Config for showing the log in the commits view
-    # One of: 'date-order' | 'author-date-order' | 'topo-order' | 'default'
-    # 'topo-order' makes it easier to read the git log graph, but commits may not
-    # appear chronologically. See https://git-scm.com/docs/
-    #
-    # Deprecated: Configure this with `Log menu -> Commit sort order` (<c-l> in the commits window by default).
-    order: topo-order
-    # This determines whether the git graph is rendered in the commits panel
-    # One of 'always' | 'never' | 'when-maximised'
-    #
-    # Deprecated: Configure this with `Log menu -> Show git graph` (<c-l> in the commits window by default).
-    showGraph: always
   # When copying commit hashes to the clipboard, truncate them to this
   # length. Set to 40 to disable truncation.
   truncateCopiedCommitHashesTo: 12
@@ -357,20 +345,6 @@ os: # Config relating to things outside of Lazygit like how files are opened, co
   # contain "{{filename}}", but doesn't support "{{line}}".
   open: ""
   openLink: "" # Command for opening a link. Should contain "{{link}}".
-  # EditCommand is the command for editing a file.
-  # Deprecated: use Edit instead. Note that semantics are different:
-  # EditCommand is just the command itself, whereas Edit contains a
-  # "{{filename}}" variable.
-  editCommand: ""
-  # EditCommandTemplate is the command template for editing a file
-  # Deprecated: use EditAtLine instead.
-  editCommandTemplate: ""
-  # OpenCommand is the command for opening a file
-  # Deprecated: use Open instead.
-  openCommand: ""
-  # OpenLinkCommand is the command for opening a link
-  # Deprecated: use OpenLink instead.
-  openLinkCommand: ""
   # CopyToClipboardCmd is the command for copying to clipboard.
   # See https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md#custom-command-for-copying-to-clipboard
   copyToClipboardCmd: ""

@@ -120,6 +120,11 @@ func getDefault(v *orderedmap.OrderedMap) (error, any) {
 
 func parseNode(parent *Node, name string, value *orderedmap.OrderedMap) {
 	description := getDescription(value)
+
+	if strings.Contains(description, "Deprecated: ") {
+		return
+	}
+
 	err, defaultValue := getDefault(value)
 	if err == nil {
 		leaf := &Node{Name: name, Description: description, Default: defaultValue}
@@ -134,13 +139,17 @@ func parseNode(parent *Node, name string, value *orderedmap.OrderedMap) {
 	orderedProperties := properties.(orderedmap.OrderedMap)
 
 	node := &Node{Name: name, Description: description}
-	parent.Children = append(parent.Children, node)
 
 	keys := orderedProperties.Keys()
 	for _, name := range keys {
 		value, _ := orderedProperties.Get(name)
 		typedValue := value.(orderedmap.OrderedMap)
 		parseNode(node, name, &typedValue)
+	}
+
+	// We want to skip adding nodes that have no children
+	if len(node.Children) > 0 {
+		parent.Children = append(parent.Children, node)
 	}
 }
 
