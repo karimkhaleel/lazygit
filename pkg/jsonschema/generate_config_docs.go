@@ -22,6 +22,16 @@ type Node struct {
 
 const IndentLevel = 2
 
+func setComment(yamlNode *yaml.Node, description string) {
+	// If the description is more than one line, put it before the key,
+	// otherwise add it after the value on the same line.
+	if strings.Count(description, "\n") > 0 {
+		yamlNode.HeadComment = description
+	} else {
+		yamlNode.LineComment = description
+	}
+}
+
 func (n *Node) MarshalYAML() (interface{}, error) {
 	node := yaml.Node{
 		Kind: yaml.MappingNode,
@@ -32,7 +42,7 @@ func (n *Node) MarshalYAML() (interface{}, error) {
 		Value: n.Name,
 	}
 	if n.Description != "" {
-		keyNode.HeadComment = n.Description
+		setComment(&keyNode, n.Description)
 	}
 
 	if n.Default != nil {
@@ -59,7 +69,7 @@ func (n *Node) MarshalYAML() (interface{}, error) {
 				Value: child.Name,
 			}
 			if child.Description != "" {
-				childKey.HeadComment = child.Description
+				setComment(&childKey, child.Description)
 			}
 			childYaml = childYaml.(*yaml.Node)
 			childrenNode.Content = append(childrenNode.Content, childYaml.(*yaml.Node).Content...)
