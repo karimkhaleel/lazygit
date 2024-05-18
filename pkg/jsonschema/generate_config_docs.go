@@ -9,6 +9,7 @@ import (
 
 	"github.com/iancoleman/orderedmap"
 	"github.com/jesseduffield/lazycore/pkg/utils"
+	"github.com/samber/lo"
 
 	"gopkg.in/yaml.v3"
 )
@@ -26,7 +27,19 @@ func setComment(yamlNode *yaml.Node, description string) {
 	// If the description is more than one line, put it before the key,
 	// otherwise add it after the value on the same line.
 	if strings.Count(description, "\n") > 0 {
-		yamlNode.HeadComment = description
+		// Workaround for the way yaml formats the HeadComment if it contains
+		// blank lines: it renders these without a leading "#", but we want a
+		// leading "#" even on blank lines. However, yaml respects it if the
+		// HeadComment already contains a leading "#", so we prefix all lines
+		// (including blank ones) with "#".
+		yamlNode.HeadComment = strings.Join(
+			lo.Map(strings.Split(description, "\n"), func(s string, _ int) string {
+				if s == "" {
+					return "#" // avoid trailing space on blank lines
+				}
+				return "# " + s
+			}),
+			"\n")
 	} else {
 		yamlNode.LineComment = description
 	}
